@@ -1,0 +1,18 @@
+FROM bitnami/spark:latest
+
+WORKDIR /app
+
+USER root
+RUN apt-get update && \
+    apt-get install -y wget && \
+    apt-get clean
+USER 1001
+# Download PostgreSQL JDBC driver
+RUN wget https://jdbc.postgresql.org/download/postgresql-42.2.24.jar -P /app
+
+
+COPY spark-application.py .
+
+CMD ["spark-submit", "--packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.4.1", \
+    "--master", "spark://spark-master:7077", "--jars", "/app/postgresql-42.2.24.jar", \
+    "--name", "SparkApplication", "spark-application.py"]

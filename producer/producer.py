@@ -7,6 +7,7 @@ import time
 KAFKA_BOOTSTRAP_SERVERS = 'kafka:9092'  # Replace with your Kafka bootstrap servers
 TOPIC_NAME = 'user_registration'  # Replace with your Kafka topic name
 
+
 def delivery_report(err, msg):
     """Callback function to handle the delivery report from Kafka."""
     if err is not None:
@@ -14,11 +15,11 @@ def delivery_report(err, msg):
     else:
         print(f"Message delivered to {msg.topic()} [{msg.partition()}]")
 
-def generate_fake_data():
+def generate_fake_data(id):
     """Generate fake data for the Kafka messages."""
     # Replace this with your own logic to generate the desired fake data
     fake_data = {
-        "user_id": random.randint(1, 1000),
+        "user_id": id,
         "name": "John Doe",
         "email": "john.doe@example.com",
         "timestamp": str(datetime.now())
@@ -27,8 +28,8 @@ def generate_fake_data():
 
 def produce_fake_messages(producer, topic, num_messages):
     """Produce fake messages to the specified Kafka topic."""
-    for _ in range(num_messages):
-        fake_data = generate_fake_data()
+    for id in range(num_messages):
+        fake_data = generate_fake_data(id)
         producer.produce(topic, value=fake_data, callback=delivery_report)
         producer.flush()
 
