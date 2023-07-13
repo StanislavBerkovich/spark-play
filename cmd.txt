@@ -1,0 +1,3 @@
+# Read kafka topic
+
+docker-compose exec kafka /bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic user_registration --from-beginning
